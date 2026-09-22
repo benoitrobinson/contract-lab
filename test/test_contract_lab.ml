@@ -6,4 +6,5 @@ let () =
     [
       ("smoke", [ Alcotest.test_case "version" `Quick test_version ]);
       ("american", Test_american.suite);
+      ("barrier", Test_barrier.suite);
     ]
