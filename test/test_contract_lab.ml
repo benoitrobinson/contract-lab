@@ -3,4 +3,7 @@ let test_version () =
 
 let () =
   Alcotest.run "contract-lab"
-    [ ("smoke", [ Alcotest.test_case "version" `Quick test_version ]) ]
+    [
+      ("smoke", [ Alcotest.test_case "version" `Quick test_version ]);
+      ("american", Test_american.suite);
+    ]
