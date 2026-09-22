@@ -440,7 +440,7 @@ let%expect_test "an autocallable is ten lines of algebra" =
       ~coupon:5.0 ~notional:100.0 ~ki_barrier:60.0
   in
   print_string (String.sub (Contract.to_string c) 0 60);
-  [%expect {| when (on or after 2026-12-25) if (S >= 100) then scale |}]
+  [%expect {| when (on or after 2026-12-25) if (S >= 100) then scale 105 o |}]
 ```
 
 - [ ] **Step 2: Run to verify it fails**
