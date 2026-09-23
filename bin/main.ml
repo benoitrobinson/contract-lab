@@ -32,7 +32,8 @@ let study path =
   Printf.printf "forward %.2f   expiry %.4f years   atm implied vol %.2f%%\n"
     sl.Svi.forward sl.Svi.t
     (100.0 *. Svi.sigma sl ~strike:sl.Svi.forward);
-  Printf.printf "\nK/F     strike       N(d2)     call spread   difference (bps)\n";
+  Printf.printf
+    "\nK/F     strike       N(d2)     call spread   difference (bps)\n";
   List.iter2
     (fun m (k, flat, spread, bps) ->
       Printf.printf "%-7.2f %-12.1f %-9.5f %-13.5f %+.1f\n" m k flat spread bps)
@@ -83,7 +84,8 @@ let checks () =
   Printf.printf "european put, 500 steps                   %.4f\n"
     (Lattice.price (put_model 500) european);
   Printf.printf "early exercise premium                    %.4f\n"
-    (Lattice.price (put_model 500) american -. Lattice.price (put_model 500) european)
+    (Lattice.price (put_model 500) american
+    -. Lattice.price (put_model 500) european)
 
 let () =
   match Sys.argv with
