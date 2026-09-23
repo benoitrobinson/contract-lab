@@ -1,10 +1,11 @@
 (** The digital as the market would price it if one volatility applied: the
     Black-Scholes cash-or-nothing value at sigma(K). *)
 let digital_flat sl ~s ~r ~strike =
-  Bs.digital_call ~s ~k:strike ~r ~sigma:(Svi.sigma sl ~strike) ~t:sl.Svi.t ~cash:1.0
+  Bs.digital_call ~s ~k:strike ~r ~sigma:(Svi.sigma sl ~strike) ~t:sl.Svi.t
+    ~cash:1.0
 
-(** The digital as a call spread on the smile: each leg priced at its own implied
-    volatility. *)
+(** The digital as a call spread on the smile: each leg priced at its own
+    implied volatility. *)
 let digital_from_spread sl ~s ~r ~strike =
   let h = 0.005 *. strike in
   let c k = Bs.call ~s ~k ~r ~sigma:(Svi.sigma sl ~strike:k) ~t:sl.Svi.t in

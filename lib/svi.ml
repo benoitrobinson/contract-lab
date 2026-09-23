@@ -1,5 +1,3 @@
-(** A raw SVI slice: total variance w(k) = a + b (rho (k - m) + sqrt((k - m)^2 +
-    s^2)) in log-moneyness k = ln(K / F), for one expiry. *)
 type slice = {
   a : float;
   b : float;
@@ -9,6 +7,8 @@ type slice = {
   t : float;
   forward : float;
 }
+(** A raw SVI slice: total variance w(k) = a + b (rho (k - m) + sqrt((k - m)^2 +
+    s^2)) in log-moneyness k = ln(K / F), for one expiry. *)
 
 let total_variance sl k =
   sl.a
@@ -22,7 +22,8 @@ let sigma sl ~strike =
 (** dsigma/dK by central difference, one percent of the strike either side. *)
 let skew sl ~strike =
   let h = 0.01 *. strike in
-  (sigma sl ~strike:(strike +. h) -. sigma sl ~strike:(strike -. h)) /. (2.0 *. h)
+  (sigma sl ~strike:(strike +. h) -. sigma sl ~strike:(strike -. h))
+  /. (2.0 *. h)
 
 let of_file path =
   (* Lines that are not "key value" are skipped, so the file can carry the

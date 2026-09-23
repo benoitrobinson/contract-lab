@@ -42,6 +42,7 @@ opam switch create . 5.4.1
 opam install -y --deps-only --with-test .
 dune test
 dune exec bin/main.exe -- termsheet
+dune exec bin/main.exe -- checks
 dune exec bin/main.exe -- study
 ```
 
@@ -49,7 +50,8 @@ dune exec bin/main.exe -- study
 
 There is no closed-form price for an autocallable and no published table this repository
 trusts more than its own arithmetic, so every check is an identity that fails loudly if
-either side is wrong.
+either side is wrong. Every number below is printed by `dune exec bin/main.exe -- checks`,
+so none of them has to be taken on trust.
 
 | check | reference |
 |---|---|
