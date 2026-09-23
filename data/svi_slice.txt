@@ -4,7 +4,7 @@
 # from public mark IVs on 56 out-of-the-money quotes,
 # expiry 2026-10-30 08:00 UTC.
 #
-# rmse 0.00296 vol points, minimum Durrleman g +0.128966, so the
+# rmse 0.296 vol points, minimum Durrleman g +0.128966, so the
 # slice is free of butterfly arbitrage on the fitted range.
 #
 # Refit with:
