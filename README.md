@@ -1,5 +1,7 @@
 # contract-lab
 
+[![ci](https://github.com/benoitrobinson/contract-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/benoitrobinson/contract-lab/actions/workflows/ci.yml)
+
 A derivative is not a product, it is an expression.
 
 ```ocaml
