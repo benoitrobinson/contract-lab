@@ -85,7 +85,23 @@ let checks () =
     (Lattice.price (put_model 500) european);
   Printf.printf "early exercise premium                    %.4f\n"
     (Lattice.price (put_model 500) american
-    -. Lattice.price (put_model 500) european)
+    -. Lattice.price (put_model 500) european);
+  let lsm, se =
+    Lsm.price
+      {
+        Mc.s0 = 36.0;
+        r = 0.06;
+        sigma = 0.2;
+        today;
+        horizon;
+        steps = 50;
+        paths = 40_000;
+        seed = 5;
+      }
+      american ~strike:40.0
+  in
+  Printf.printf "american put, Longstaff-Schwartz          %.4f +/- %.4f\n" lsm
+    se
 
 let () =
   match Sys.argv with

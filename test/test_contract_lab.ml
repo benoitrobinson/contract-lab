@@ -9,4 +9,5 @@ let () =
       ("barrier", Test_barrier.suite);
       ("simplify", Test_simplify.suite);
       ("study", Test_study.suite);
+      ("lsm", Test_lsm.suite);
     ]

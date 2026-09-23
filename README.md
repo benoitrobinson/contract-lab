@@ -79,6 +79,7 @@ so none of them has to be taken on trust.
 | Down-and-out call | Reiner-Rubinstein, 8.6617 against 8.6655, with the lattice aligned to the barrier after Boyle and Lau (1994) |
 | American call, no dividends | equals the European call on the same tree, exactly |
 | American put | 4.4864 at 500 steps, 4.4867 at 2000, early-exercise premium 0.64 |
+| American put, again by Longstaff-Schwartz | 4.4584 +/- 0.0148 against the lattice's 4.4867, below it by 0.6%, which is the bias the method has |
 | Monte Carlo | agrees with the lattice within three standard errors on every choice-free product |
 | Simplifier | QCheck: `price (simplify c) = price c` on 300 random contracts |
 
@@ -100,9 +101,15 @@ contract's own local cashflow, recovered as `v(i)` less the discounted expectati
 `v(i+1)`, and rebuilds the expectation over the surviving nodes. No product knows it is a
 barrier.
 
-**Why Monte Carlo refuses `anytime`.** A forward simulation cannot see the holder's
-optimal decision. Least-squares Monte Carlo would, and is deliberately not here: pricing a
-contract wrongly is worse than refusing it, so `has_choice` rejects the contract instead.
+**Why plain Monte Carlo refuses `anytime`, and what answers it.** A forward simulation
+cannot see the holder's optimal decision: at a node you know what exercising pays, and the
+value of waiting is an expectation over paths that have not happened yet. `Mc` refuses
+such contracts rather than pricing them wrongly. `Lsm` is the answer of Longstaff and
+Schwartz (2001): estimate the continuation value from the cross-section of paths by
+regressing the realised discounted cashflow on functions of spot, and exercise when the
+immediate payoff beats the fit. It is biased low by construction, because the rule is
+fitted on the paths it is applied to, and the test holds it under the lattice for exactly
+that reason rather than asserting equality.
 
 ## What this does not do
 
@@ -111,6 +118,8 @@ contract wrongly is worse than refusing it, so `has_choice` rejects the contract
 - Continuous barriers are priced on a discretely monitored tree. The remaining error is
   quantified in the test rather than waved at.
 - No credit, no collateral, no multi-asset payoffs.
+- Longstaff-Schwartz handles `anytime` over a choice-free contract, which covers American
+  options. A choice nested inside a choice would need a nested regression and is refused.
 - The SVI slice is one expiry, fitted once from public mark quotes. It is a snapshot,
   not a surface, and nothing here refits it as the market moves.
 - Rates and carry are set to zero in the study, which for a 37-day crypto option moves the
