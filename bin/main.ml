@@ -25,12 +25,19 @@ let termsheet () =
 
 let study path =
   let sl = Svi.of_file path in
-  Printf.printf "strike   N(d2)     call spread   difference (bps)\n";
-  List.iter
-    (fun (k, flat, spread, bps) ->
-      Printf.printf "%-8.1f %-9.5f %-13.5f %+.1f\n" k flat spread bps)
-    (Study.table sl ~s:sl.Svi.forward ~r:0.0
-       ~strikes:[ 80.0; 90.0; 95.0; 100.0; 105.0; 110.0; 120.0 ])
+  (* Strikes are fractions of the forward, so the table means the same thing
+     whatever the underlying is worth. *)
+  let moneyness = [ 0.80; 0.90; 0.95; 1.00; 1.05; 1.10; 1.20 ] in
+  let strikes = List.map (fun m -> m *. sl.Svi.forward) moneyness in
+  Printf.printf "forward %.2f   expiry %.4f years   atm implied vol %.2f%%\n"
+    sl.Svi.forward sl.Svi.t
+    (100.0 *. Svi.sigma sl ~strike:sl.Svi.forward);
+  Printf.printf "\nK/F     strike       N(d2)     call spread   difference (bps)\n";
+  List.iter2
+    (fun m (k, flat, spread, bps) ->
+      Printf.printf "%-7.2f %-12.1f %-9.5f %-13.5f %+.1f\n" m k flat spread bps)
+    moneyness
+    (Study.table sl ~s:sl.Svi.forward ~r:0.0 ~strikes)
 
 (* Every number the README quotes is printed here, so a reader can regenerate
    the table rather than trust it. The tests assert the identities; this prints

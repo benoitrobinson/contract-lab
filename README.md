@@ -24,16 +24,33 @@ autocallable           when (on or after 2026-12-25) if (S >= 100) then scale 10
 
 ## Headline
 
-**Not measured yet.** The study that gives this repository its number prices a
-cash-or-nothing digital two ways on a fitted BTC smile: as `exp(-rT) N(d2)`, and as the
-limit of a call spread where each leg carries its own implied volatility. The difference
-is `vega * dsigma/dK`, and `test_the_skew_term_explains_the_difference` pins that identity
-to three decimals.
+**On a live BTC smile, a digital is not `N(d2)`, and the gap is hundreds of basis points.**
 
-`data/svi_slice.txt` currently holds the plan's illustrative parameters, clearly marked as
-a placeholder. Until a real slice is exported from `vol-lab`, `dune exec bin/main.exe --
-study` prints a table that exercises every code path and describes no market, and no
-number from it belongs in a headline.
+A cash-or-nothing digital paying 1 is `exp(-rT) N(d2)` under a single volatility. It is
+also the limit of a call spread, and once each leg carries its own implied volatility the
+two disagree by exactly `vega * dsigma/dK`. On an SVI slice fitted to Deribit's BTC
+options, 37 days to expiry, forward 86,203, at-the-money implied 36.4%:
+
+| K/F | N(d2) | call spread | difference |
+|---|---|---|---|
+| 0.90 | 0.78376 | 0.82516 | **+414 bps** |
+| 0.95 | 0.64592 | 0.67580 | +299 bps |
+| 1.00 | 0.47691 | 0.48418 | +73 bps |
+| 1.05 | 0.31644 | 0.30318 | -133 bps |
+| 1.10 | 0.19498 | 0.17242 | **-226 bps** |
+
+The sign follows the slope of the smile, and the size is not a rounding error: four
+percentage points of the payout at the 0.90 strike. A desk quoting binaries off `N(d2)`
+with a smile this steep is quoting the wrong price, in the same direction, every time.
+
+`test_the_skew_term_explains_the_difference` pins the decomposition itself: the call
+spread equals `N(d2)` minus `vega * dsigma/dK` to three decimals, so the table above is
+the identity doing its work rather than two numbers that happen to differ.
+
+Regenerate it with `dune exec bin/main.exe -- study`. The slice in `data/svi_slice.txt` is
+a snapshot with its provenance in the header: refit it from `vol-lab` with
+`uv run python scripts/export_slice.py --out ../contract-lab/data/svi_slice.txt`, and the
+numbers will move with the market.
 
 ## Try it
 
@@ -94,7 +111,10 @@ contract wrongly is worse than refusing it, so `has_choice` rejects the contract
 - Continuous barriers are priced on a discretely monitored tree. The remaining error is
   quantified in the test rather than waved at.
 - No credit, no collateral, no multi-asset payoffs.
-- The SVI slice is a fit exported from another repository, not a live surface.
+- The SVI slice is one expiry, fitted once from public mark quotes. It is a snapshot,
+  not a surface, and nothing here refits it as the market moves.
+- Rates and carry are set to zero in the study, which for a 37-day crypto option moves the
+  table by less than the smile does, but is still a simplification.
 
 ## References
 

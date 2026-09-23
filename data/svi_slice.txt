@@ -1,26 +1,18 @@
-# PLACEHOLDER. These are NOT fitted parameters.
+# SVI slice fitted to a live Deribit BTC smile.
 #
-# The plan (Task 11 step 1) calls for a raw SVI slice exported from vol-lab by
-# fitting a real BTC smile. That export has not been run, so the numbers below
-# are the plan's illustrative example values, copied verbatim. They are
-# internally consistent (b > 0, |rho| < 1, s > 0, so the slice is arbitrage-free
-# in the butterfly sense for this one expiry) and they exercise every code path,
-# but they describe no market and no date.
+# Fitted 2026-09-23 08:54 UTC by vol-lab's scripts/export_slice.py,
+# from public mark IVs on 56 out-of-the-money quotes,
+# expiry 2026-10-30 08:00 UTC.
 #
-# Do not quote any number derived from this file as a result. The README
-# headline stays a placeholder until this file is replaced.
+# rmse 0.00296 vol points, minimum Durrleman g +0.128966, so the
+# slice is free of butterfly arbitrage on the fitted range.
 #
-# To replace: fit a slice in vol-lab, write the seven key/value lines below, and
-# record here the vol-lab command that produced them and the date it ran.
-#
-#   produced by: NOT YET RUN
-#   date:        NOT YET RUN
-#
-# Format: seven "key value" lines, parsed with Scanf, so no JSON dependency.
-a 0.0400
-b 0.1000
-rho -0.3000
-m 0.0000
-s 0.1000
-t 0.2500
-forward 100.0000
+# Refit with:
+#   uv run python scripts/export_slice.py --out ../contract-lab/data/svi_slice.txt
+a -0.022475
+b 0.105375
+rho -0.254664
+m -0.077343
+s 0.351829
+t 0.101267
+forward 86203.1900
