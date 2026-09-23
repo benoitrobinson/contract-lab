@@ -8,4 +8,5 @@ let () =
       ("american", Test_american.suite);
       ("barrier", Test_barrier.suite);
       ("simplify", Test_simplify.suite);
+      ("study", Test_study.suite);
     ]
