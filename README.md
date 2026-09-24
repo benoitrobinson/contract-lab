@@ -63,7 +63,11 @@ dune test
 dune exec bin/main.exe -- termsheet
 dune exec bin/main.exe -- checks
 dune exec bin/main.exe -- study
+dune exec bin/main.exe -- study --json   # every command takes --json
 ```
+
+`--json` is what [`vol-lab`](https://github.com/benoitrobinson/vol-lab)'s terminal panel
+reads: its tab 9 draws the table above, the checks and the term sheets from this binary.
 
 ## How it is checked
 
